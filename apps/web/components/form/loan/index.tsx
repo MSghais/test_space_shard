@@ -39,27 +39,18 @@ const CreateLoanForm = ({}: ICreateSaleForm) => {
     id: undefined,
     priceByToken: undefined,
     price: undefined,
-    limitDeposit:undefined,
-    interestPercentage:undefined,
-    createdAt:undefined,
-    updatedAt:undefined,
-    tokenAddress:undefined,
+    limitDeposit: undefined,
+    interestPercentage: undefined,
+    createdAt: undefined,
+    updatedAt: undefined,
+    tokenAddress: undefined,
+    assetIdCollateral:"65e0b2254fc3c5ed3bb10841",
+    assetIdFund:"65e0b2254fc3c5ed3bb10841"
   });
 
   /** @TODO refacto */
   const prepareHandleLoan = async (typeOfCreation: TypeCreationLaunch) => {
     try {
-      if (!address) {
-        toast({
-          title: "Connect your account",
-          status: "warning",
-          isClosable: true,
-          duration: 1000,
-        });
-        return;
-      }
-
-
       const res = await axios.post("/api/restricted/loans/createLoan", {
         loan: form,
 
@@ -121,6 +112,12 @@ const CreateLoanForm = ({}: ICreateSaleForm) => {
             }}
           ></Input>
 
+          <Text>Asset possible: 
+          65e0b2254fc3c5ed3bb10841
+
+
+          </Text>
+
           <Text textAlign={"left"}>Asset</Text>
 
           {TypeCreationLaunch.CREATE_LOAN == typeLaunchCreation && (
@@ -128,12 +125,25 @@ const CreateLoanForm = ({}: ICreateSaleForm) => {
               // my='1em'
               my={{ base: "0.25em", md: "0.5em" }}
               py={{ base: "0.5em" }}
+              aria-valuetext={form?.assetIdFund}
               onChange={(e) => {
                 setForm({ ...form, assetIdFund: e.target.value });
               }}
               placeholder="Asset to fund ID"
             ></Input>
           )}
+
+          <Text textAlign={"left"}>Token limit mint</Text>
+
+          <Input
+            // my='1em'
+            my={{ base: "0.25em", md: "0.5em" }}
+            py={{ base: "0.5em" }}
+            onChange={(e) => {
+              setForm({ ...form, tokenLimitMint: Number(e.target.value )});
+            }}
+            placeholder="Token limit mint"
+          ></Input>
 
           <Box height={"100%"}>
             <Box>
@@ -168,7 +178,6 @@ const CreateLoanForm = ({}: ICreateSaleForm) => {
             p={{ base: "1em" }}
             borderRadius={{ base: "5px" }}
           >
-          
             <Text textAlign={"left"}>Annual interest %</Text>
 
             <Input

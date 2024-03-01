@@ -7,19 +7,7 @@ import { ERROR_MESSAGES } from "../../../../constants/error";
 
 const createLoansHandler: NextApiHandler = async (req, res) => {
   try {
-    const { amountToDeposit, assetId, interestPercentage, loan } = req.body;
-
-    if (!amountToDeposit) {
-      return res.status(500).json({
-        message: ERROR_MESSAGES.NO_AMOUNT_TO_BORROW,
-      });
-    }
-
-    if (typeof amountToDeposit != "undefined") {
-      return res.status(500).json({
-        message: ERROR_MESSAGES.NO_AMOUNT_TO_BORROW,
-      });
-    }
+    const {  assetId, interestPercentage, loan } = req.body;
 
     const sessionServer = await getServerSession(req, res, authOptions);
     console.log("sessionServer", sessionServer);
