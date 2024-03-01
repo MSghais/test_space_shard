@@ -1,11 +1,9 @@
 import { Box, Text, Button, CardFooter, Input } from "@chakra-ui/react";
 import { LoanCardView, DepositByUser } from "../../../types";
 import { Uint256, cairo } from "starknet";
-import { feltToAddress, feltToString } from "../../../utils/starknet";
 import { useAccount } from "@starknet-react/core";
 import { useEffect, useState } from "react";
-import { ExternalStylizedButtonLink } from "../../../components/button/NavItem";
-import { CONFIG_WEBSITE } from "../../../constants";
+
 import { DepositInteractions } from "./DepositInteractions";
 
 interface IDepositComponentPageView {
@@ -14,7 +12,6 @@ interface IDepositComponentPageView {
   id?: number;
 }
 
-/** @TODO get component view ui with call claim reward for recipient visibile */
 export const DepositComponent = ({
   deposit,
   viewType,
@@ -37,25 +34,11 @@ export const DepositComponent = ({
     updateWithdrawTo();
   }, [address]);
 
-  const owner = deposit?.owner?.toString();
-  function timeAgo(date: Date): string {
-    const now = new Date();
-    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-
-    if (diffInSeconds < 60) {
-      return `${diffInSeconds} seconds ago`;
-    } else if (diffInSeconds < 3600) {
-      const minutes = Math.floor(diffInSeconds / 60);
-      return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
-    } else if (diffInSeconds < 86400) {
-      const hours = Math.floor(diffInSeconds / 3600);
-      return `${hours} hour${hours > 1 ? "s" : ""} ago`;
-    } else {
-      const days = Math.floor(diffInSeconds / 86400);
-      return `${days} day${days > 1 ? "s" : ""} ago`;
-    }
-  }
-
+  let interestPercentage =
+    deposit?.loanDeposit?.interestPercentage ?? deposit?.interestPercentage;
+  const toPayAnnualy:number|undefined = (deposit?.totalDeposit * interestPercentage) / 100;
+  console.log("deposit?.loanDeposit", deposit?.loanDeposit);
+  console.log("toPay annualy", toPayAnnualy);
   return (
     <>
       <Box
@@ -67,9 +50,13 @@ export const DepositComponent = ({
         // justifyContent={"space-between"}
         height={"100%"}
       >
-        <Text>{deposit?.createdAt}</Text>
-        <Text>{deposit?.totalDeposit}</Text>
+        <Text>{deposit?.createdAt?.toString()}</Text>
+        <Text>Total deposit: {deposit?.totalDeposit}</Text>
 
+        {!Number.isNaN(toPayAnnualy) &&
+        <Text>To pay: {toPayAnnualy}% per year</Text>
+        
+        }
         <DepositInteractions deposit={deposit} id={id}></DepositInteractions>
       </Box>
     </>

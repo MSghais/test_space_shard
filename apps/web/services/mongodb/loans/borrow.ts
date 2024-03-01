@@ -20,9 +20,9 @@ export const borrowByLoan = async ({ loan, user, amountToBorrow }: IBorrowByLoan
           {
             ownerId: user?.id
           },
-          {
-            loanId: loan?.id,
-          },
+          // {
+          //   loanId: loan?.id,
+          // },
         ],
       },
     });
@@ -35,6 +35,11 @@ export const borrowByLoan = async ({ loan, user, amountToBorrow }: IBorrowByLoan
           ownerProfile: {
             connect: {
               id: user?.id
+            }
+          },
+          loanDeposit:{
+            connect:{
+              id:loan?.id,
             }
           }
         }

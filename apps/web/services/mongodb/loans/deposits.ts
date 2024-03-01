@@ -11,6 +11,14 @@ export const getAllDepositsByUser = async ({ userId }: IDepositByUser) => {
     const depositsByUser = await prisma.deposit.findMany({
       where: {
         ownerId: userId
+      },
+      select:{
+        totalDeposit:true,
+        loanDeposit:{
+          select:{
+            interestPercentage:true,
+          }
+        }
       }
     })
     return depositsByUser;

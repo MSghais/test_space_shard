@@ -67,17 +67,14 @@ export interface LaunchInterface extends Loans {
 
 export interface DepositByUser extends Deposit{
   launch_id?: number;
+  createdAt?:Date;
   asset?: string;
   owner: string;
   quote_token_address?: string;
-  deposited?: number;
-  redeemable: string;
-  withdrawn: Uint256;
-  withdraw_amount: Uint256;
-  refunded: Uint256;
-  is_canceled?: boolean;
-  remain_token_to_be_claimed: Uint256;
-  total_token_to_be_claimed: Uint256;
+  totalDeposit?: number;
+  interestPercentage?:number;
+  loanDeposit?:Loans
+
 }
 
 

@@ -72,6 +72,7 @@ export const LoansViewContainer = () => {
       dispatchAllLoans(loansFilter)
       if(session?.data) {
         const res = await axios.get("/api/restricted/loans/depositByUser")
+        console.log("res",res?.data?.data)
         setDepositsUser(res?.data?.data?.deposits)
       }
       setIsLoadOneTime(true)
@@ -258,10 +259,6 @@ const DepositLaunchComponent = ({
         >
           {deposits?.length > 0 &&
             deposits.map((deposit, i) => {
-
-              if (!deposit?.asset && Number(deposit?.deposited) > 0) {
-                return;
-              }
               return (
                 <DepositCard
                   deposit={deposit}
