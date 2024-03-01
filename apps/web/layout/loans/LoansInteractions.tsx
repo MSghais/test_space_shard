@@ -1,4 +1,12 @@
-import { Box, Card, Text, Button, CardFooter, Input } from "@chakra-ui/react";
+import {
+  Box,
+  Card,
+  Text,
+  Button,
+  CardFooter,
+  Input,
+  useToast,
+} from "@chakra-ui/react";
 import { LaunchInterface, LoanCardView } from "../../types";
 import {
   Uint256,
@@ -19,7 +27,6 @@ import {
 import { CONFIG_WEBSITE } from "../../constants";
 import axios from "axios";
 
-
 interface ILaunchPageView {
   loan?: LaunchInterface;
   viewType?: LoanCardView;
@@ -28,12 +35,12 @@ interface ILaunchPageView {
 
 /** @TODO get component view ui with call claim reward for recipient visibile */
 export const LoansInteractions = ({ loan, viewType, id }: ILaunchPageView) => {
-
+  const toast = useToast();
   const account = useAccount().account;
   const address = account?.address;
 
   const [withdrawTo, setWithdrawTo] = useState<string | undefined>(address);
-  const [amount, setAmount] = useState<number | undefined>(0)
+  const [amount, setAmount] = useState<number | undefined>(0);
   const [amountToBuy, setAmountToBuy] = useState<Uint256 | undefined>(
     cairo.uint256(0)
     // 0
@@ -47,21 +54,22 @@ export const LoansInteractions = ({ loan, viewType, id }: ILaunchPageView) => {
     updateWithdrawTo();
   }, [address]);
 
-
   const handleBorrowLoan = async () => {
     try {
-      console.log("amount",amount)
-      console.log("loan",loan)
+      console.log("amount", amount);
+      console.log("loan", loan);
       const res = await axios.post("/api/restricted/loans/borrowByLoan", {
         loanId: loan?.id,
-        amount: amount
-      })
-      console.log("res")
-    } catch (e) {
-      console.log("handleBorrowLoan", e)
-    }
+        amount: amount,
+      });
 
-  }
+      toast({ title: "Borrow succeed" });
+      console.log("res");
+    } catch (e) {
+      console.log("handleBorrowLoan", e);
+      toast({ title: "Error in borrow", status: "error" });
+    }
+  };
   return (
     <>
       <Box
@@ -83,9 +91,7 @@ export const LoansInteractions = ({ loan, viewType, id }: ILaunchPageView) => {
           maxW={"fit-content"}
           minW={{ base: "100px", md: "150px" }}
           onChange={(e) => {
-
-            setAmount(Number(e?.target?.value))
-          
+            setAmount(Number(e?.target?.value));
           }}
           placeholder="Amount to deposit"
         ></Input>
@@ -97,7 +103,6 @@ export const LoansInteractions = ({ loan, viewType, id }: ILaunchPageView) => {
           display={"flex"}
           gridTemplateColumns={{ md: "repeat(3,1fr)" }}
         >
-
           <Button
             width={"100%"}
             my={{ base: "0.25em" }}
@@ -106,9 +111,9 @@ export const LoansInteractions = ({ loan, viewType, id }: ILaunchPageView) => {
             Borrow
           </Button>
 
-          <Button
+          {/* <Button
             width={"100%"}
-          >Withdraw</Button>
+          >Withdraw</Button> */}
         </Box>
       </Box>
     </>

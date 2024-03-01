@@ -38,7 +38,9 @@ const createLoansHandler: NextApiHandler = async (req, res) => {
       });
     }
 
-    const loans = await createLoan({ loan: loan });
+    let user = checkUser?.data
+
+    const loans = await createLoan({ loan: loan, user:user});
 
     return res.json({
       data: loans,

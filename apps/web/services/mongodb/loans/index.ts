@@ -1,18 +1,23 @@
 import { PrismaClient } from "@prisma/client";
 import { CreateLoan } from "../../../types";
+import {User} from "db_mongo"
 const prisma = new PrismaClient();
 interface ICreateLoan {
   loan: CreateLoan;
+  user?:User
 }
 
 // TODO refacto sanitize
-export const createLoan = async ({ loan }) => {
+export const createLoan = async ({ loan, user }) => {
   try {
     const loans = await prisma.loans.create({
       data: {
         ...loan,
+        owner:user?.id,
+        // ownerPro
       },
     });
+    console.log("loans",loans)
     console.log("loans", loans);
 
     return loans;

@@ -8,33 +8,22 @@ import {
   FormLabel,
   Checkbox,
 } from "@chakra-ui/react";
-import { useAccount, useNetwork } from "@starknet-react/core";
 import { useEffect, useState } from "react";
 import { CreateLoan, TypeCreationLaunch } from "../../../types";
 
 import { cairo, TransactionStatus } from "starknet";
 import { ExternalStylizedButtonLink } from "../../button/NavItem";
 import axios from "axios";
-// import { VoyagerExplorerImage } from "../../view/VoyagerExplorerImage";
 
 interface ICreateSaleForm {}
 
 const CreateLoanForm = ({}: ICreateSaleForm) => {
   const toast = useToast();
-  const accountStarknet = useAccount();
-  const network = useNetwork();
-  const chainId = network.chain.id;
-  const networkName = network.chain.name;
 
-  const account = accountStarknet?.account;
-  const address = accountStarknet?.account?.address;
-  const [txHash, setTxHash] = useState<string | undefined>();
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [typeLaunchCreation, setTypeLaunchCreation] = useState<
     TypeCreationLaunch | undefined
   >(TypeCreationLaunch.CREATE_LOAN);
-  const [recipient, setRecipient] = useState<boolean>(true);
-  const [typeCreation, setTypeCreation] = useState<boolean>(true);
   const [form, setForm] = useState<Partial<CreateLoan> | undefined>({
     id: undefined,
     priceByToken: undefined,
@@ -44,8 +33,8 @@ const CreateLoanForm = ({}: ICreateSaleForm) => {
     createdAt: undefined,
     updatedAt: undefined,
     tokenAddress: undefined,
-    assetIdCollateral:"65e0b2254fc3c5ed3bb10841",
-    assetIdFund:"65e0b2254fc3c5ed3bb10841"
+    assetIdCollateral: "65e0b2254fc3c5ed3bb10841",
+    assetIdFund: "65e0b2254fc3c5ed3bb10841",
   });
 
   /** @TODO refacto */
@@ -57,8 +46,10 @@ const CreateLoanForm = ({}: ICreateSaleForm) => {
         amountToDeposit: form?.totalSupply,
         interestPercentage: form?.interestPercentage,
       });
+      toast({ title: "Loan created successfully"});
     } catch (e) {
       console.log("prepareCreateLaunch", e);
+      toast({ title: "Error in loan", status: "error" });
     }
   };
 
@@ -112,11 +103,7 @@ const CreateLoanForm = ({}: ICreateSaleForm) => {
             }}
           ></Input>
 
-          <Text>Asset possible: 
-          65e0b2254fc3c5ed3bb10841
-
-
-          </Text>
+          <Text>Asset possible: 65e0b2254fc3c5ed3bb10841</Text>
 
           <Text textAlign={"left"}>Asset</Text>
 
@@ -140,7 +127,7 @@ const CreateLoanForm = ({}: ICreateSaleForm) => {
             my={{ base: "0.25em", md: "0.5em" }}
             py={{ base: "0.5em" }}
             onChange={(e) => {
-              setForm({ ...form, tokenLimitMint: Number(e.target.value )});
+              setForm({ ...form, tokenLimitMint: Number(e.target.value) });
             }}
             placeholder="Token limit mint"
           ></Input>
@@ -191,6 +178,21 @@ const CreateLoanForm = ({}: ICreateSaleForm) => {
                 });
               }}
               placeholder="Annual interest % for borrower"
+            ></Input>
+
+            <Text textAlign={"left"}>Limit deposit</Text>
+
+            <Input
+              py={{ base: "0.5em" }}
+              type="number"
+              my={{ base: "0.25em", md: "0.5em" }}
+              onChange={(e) => {
+                setForm({
+                  ...form,
+                  limitDeposit: Number(e.target.value),
+                });
+              }}
+              placeholder="Limit deposit"
             ></Input>
           </Box>
         </Box>

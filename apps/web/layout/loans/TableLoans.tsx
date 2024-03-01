@@ -33,10 +33,10 @@ export const TableLoans = ({ viewType, loans, filterLaunch }: IStreamCard) => {
             <Tr>
               <Th>Asset </Th>
               <Th>Actions</Th>
-              <Th>Quote address</Th>
-              <Th>Amount to borrow</Th>
-              <Th>Amount</Th>
+              <Th>Created at</Th>
               <Th>Annual interest</Th>
+              <Th>Amount to borrow</Th>
+              <Th>Total borrowed</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -50,9 +50,11 @@ export const TableLoans = ({ viewType, loans, filterLaunch }: IStreamCard) => {
                     alignContent={"end"}
                     alignItems={"end"}
                   >
-                    <Td>Go</Td>
+                    <Td>{l?.assetIdFund?.toString()}</Td>
                     <Td><LoansInteractions loan={l}></LoansInteractions></Td>
-                    <Td>{l?.createdAt.toString()}</Td>
+                    <Td>{l?.createdAt?.toString()}</Td>
+                    <Td>{l?.interestPercentage?.toString()}</Td>
+                    <Td>{l?.totalBorrowed?.toString()}</Td>
                   </Tr>
                 );
                 // }

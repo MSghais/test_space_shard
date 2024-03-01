@@ -1,16 +1,10 @@
 import { Box, Text, Button, CardFooter, Input } from "@chakra-ui/react";
 import { LoanCardView, DepositByUser } from "../../../types";
-import {
-  Uint256,
-  cairo,
-
-} from "starknet";
+import { Uint256, cairo } from "starknet";
 import { feltToAddress, feltToString } from "../../../utils/starknet";
 import { useAccount } from "@starknet-react/core";
 import { useEffect, useState } from "react";
-import {
-  ExternalStylizedButtonLink,
-} from "../../../components/button/NavItem";
+import { ExternalStylizedButtonLink } from "../../../components/button/NavItem";
 import { CONFIG_WEBSITE } from "../../../constants";
 import { DepositInteractions } from "./DepositInteractions";
 
@@ -21,7 +15,11 @@ interface IDepositComponentPageView {
 }
 
 /** @TODO get component view ui with call claim reward for recipient visibile */
-export const DepositComponent = ({ deposit, viewType, id }: IDepositComponentPageView) => {
+export const DepositComponent = ({
+  deposit,
+  viewType,
+  id,
+}: IDepositComponentPageView) => {
   const account = useAccount().account;
   const address = account?.address;
 
@@ -57,13 +55,7 @@ export const DepositComponent = ({ deposit, viewType, id }: IDepositComponentPag
       return `${days} day${days > 1 ? "s" : ""} ago`;
     }
   }
-  const asset = deposit?.asset && feltToAddress(BigInt(deposit?.asset));
-  const quote_address = deposit?.quote_token_address ? feltToAddress(BigInt(deposit?.quote_token_address)) : "0x";
-  let total_amount = deposit?.deposited;
-  let remain_token_to_be_claimed = deposit?.remain_token_to_be_claimed;
-  let total_token_to_be_claimed = deposit?.total_token_to_be_claimed;
-  let total_withdraw = deposit?.withdrawn;
-  console.log("deposit", deposit);
+
   return (
     <>
       <Box
@@ -75,24 +67,10 @@ export const DepositComponent = ({ deposit, viewType, id }: IDepositComponentPag
         // justifyContent={"space-between"}
         height={"100%"}
       >
-{/* 
-        {deposit.asset && <Text>Asset: {asset}</Text>}
+        <Text>{deposit?.createdAt}</Text>
+        <Text>{deposit?.totalDeposit}</Text>
 
-        {deposit?.asset &&
-          <ExternalStylizedButtonLink
-            // pb={{ base: "0.5em" }}
-            textOverflow={"no"}
-            maxW={{ md: "170px" }}
-            href={`${CONFIG_WEBSITE.page.goerli_voyager_explorer}/contract/${asset}`}
-          >
-            <Text> Asset</Text>
-          </ExternalStylizedButtonLink>
-        } */}
-     
-   
         <DepositInteractions deposit={deposit} id={id}></DepositInteractions>
-
-
       </Box>
     </>
   );
