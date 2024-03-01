@@ -1,9 +1,8 @@
 import { NextApiHandler } from "next";
-import { getAllLoans, getLoanById } from "../../../../services/mongodb/loans";
+import {  getLoanById } from "../../../../services/mongodb/loans";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]";
 import { checkUserExistsByEmail } from "../../../../services/mongodb";
-import { borrowByLoan } from "../../../../services/mongodb/loans/borrow";
 import { ERROR_MESSAGES } from "../../../../constants/error";
 import { repayDepositLoan } from "../../../../services/mongodb/loans/repay";
 import { getDepositById } from "../../../../services/mongodb/loans/deposits";
@@ -11,12 +10,6 @@ import { getDepositById } from "../../../../services/mongodb/loans/deposits";
 const repayDebtHandler: NextApiHandler = async (req, res) => {
   try {
     const { loanId, amount, depositId } = req.body;
-
-    // if (!loanId) {
-    //   return res.status(500).json({
-    //     message: ERROR_MESSAGES.NO_LOAN_SELECTED,
-    //   });
-    // }
 
     console.log("depositId",depositId)
 
@@ -73,7 +66,7 @@ const repayDebtHandler: NextApiHandler = async (req, res) => {
 
     let id = depositToUpdate?.loanDeposit?.id as string;
     const loanToUpdate = await getLoanById(id);
-    const {deposit, loan}= await repayDepositLoan({ loan: loanToUpdate, deposit:depositToUpdate, user: checkUser?.data, amountToBorrow:amount });
+    const {deposit, loan}= await repayDepositLoan({ loan: loanToUpdate, deposit:depositToUpdate, user: checkUser?.data, amountToRepay:amount });
     return res.json({
       data: {
         loan,

@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { useEffect, useState } from "react";
-import { LaunchInterface, LoanCardView, DepositByUser } from "../../types";
+import { LoanInterface, LoanCardView, DepositByUser } from "../../types";
 import { LoanCard } from "./LoanCard";
 import { BiCard, BiTable } from "react-icons/bi";
 import { BsCardChecklist, BsCardList } from "react-icons/bs";
@@ -38,13 +38,13 @@ export interface IFilterLaunch {
 }
 export const LoansViewContainer = () => {
   const account = useAccount().account;
-  const [loans, setLoans] = useState<LaunchInterface[]>([]);
+  const [loans, setLoans] = useState<LoanInterface[]>([]);
 
   const { dispatchAllLoans, dispatchSelectedLoan } = useDatasDispatch()
   const [isLoadOneTime, setIsLoadOneTime] = useState<boolean>(false);
   const [deposits, setDepositsUser] = useState<DepositByUser[]>([]);
 
-  const [loansCreated, setLaunchCreated] = useState<LaunchInterface[]>([]);
+  const [loansCreated, setLaunchCreated] = useState<LoanInterface[]>([]);
   const [selectView, setSelectView] = useState<EnumStreamSelector>(
     EnumStreamSelector.SENDER
   );
@@ -125,12 +125,12 @@ export const LoansViewContainer = () => {
             All loans
           </Tab>
 
-          <Tab
+          {/* <Tab
             onClick={() => setSelectView(EnumStreamSelector.SENDER)}
             _selected={{ color: "brand.primary" }}
           >
             Launch created
-          </Tab>
+          </Tab> */}
           <Tab
             onClick={() => setSelectView(EnumStreamSelector.SENDER)}
             _selected={{ color: "brand.primary" }}
@@ -150,14 +150,14 @@ export const LoansViewContainer = () => {
             ></RecipientLaunchComponent>
           </TabPanel>
 
-          <TabPanel>
+          {/* <TabPanel>
             <RecipientLaunchComponent
               launchsReceivedProps={loansCreated}
               setLaunchReceivedProps={setLaunchCreated}
               setViewType={setViewType}
               viewType={viewType}
             ></RecipientLaunchComponent>
-          </TabPanel>
+          </TabPanel> */}
           <TabPanel>
             <DepositLaunchComponent
               deposits={deposits}
@@ -173,8 +173,8 @@ export const LoansViewContainer = () => {
 };
 
 interface IRecipientLaunchComponent {
-  launchsReceivedProps: LaunchInterface[];
-  setLaunchReceivedProps: (lockups: LaunchInterface[]) => void;
+  launchsReceivedProps: LoanInterface[];
+  setLaunchReceivedProps: (lockups: LoanInterface[]) => void;
   viewType?: ViewType;
   filterLaunch?: IFilterLaunch;
   setViewType: (viewType: ViewType) => void;
@@ -281,8 +281,8 @@ const DepositLaunchComponent = ({
 };
 
 interface ISenderLaunchComponent {
-  loansCreated: LaunchInterface[];
-  setLaunchCreated: (lockups: LaunchInterface[]) => void;
+  loansCreated: LoanInterface[];
+  setLaunchCreated: (lockups: LoanInterface[]) => void;
   viewType?: ViewType;
   setViewType: (viewType: ViewType) => void;
 }

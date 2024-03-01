@@ -36,7 +36,8 @@ export const DepositComponent = ({
 
   let interestPercentage =
     deposit?.loanDeposit?.interestPercentage ?? deposit?.interestPercentage;
-  const toPayAnnualy:number|undefined = (deposit?.totalDeposit * interestPercentage) / 100;
+  const toPayAnnualy: number | undefined =
+    (deposit?.totalDeposit * interestPercentage) / 100;
   console.log("deposit?.loanDeposit", deposit?.loanDeposit);
   console.log("toPay annualy", toPayAnnualy);
   return (
@@ -53,10 +54,13 @@ export const DepositComponent = ({
         <Text>{deposit?.createdAt?.toString()}</Text>
         <Text>Total deposit: {deposit?.totalDeposit}</Text>
 
-        {!Number.isNaN(toPayAnnualy) &&
-        <Text>To pay: {toPayAnnualy}% per year</Text>
-        
-        }
+        {interestPercentage && (
+          <Text>Percentage interest: {interestPercentage} %</Text>
+        )}
+
+        {!Number.isNaN(toPayAnnualy) && (
+          <Text>To pay: {toPayAnnualy}asset per year</Text>
+        )}
         <DepositInteractions deposit={deposit} id={id}></DepositInteractions>
       </Box>
     </>

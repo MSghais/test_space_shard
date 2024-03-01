@@ -5,7 +5,7 @@ import {
   Input,
   useToast,
 } from "@chakra-ui/react";
-import { LaunchInterface, LoanCardView } from "../../types";
+import { LoanInterface, LoanCardView } from "../../types";
 import {
   Uint256,
   cairo,
@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 interface ILaunchPageView {
-  loan?: LaunchInterface;
+  loan?: LoanInterface;
   viewType?: LoanCardView;
   id?: number;
 }

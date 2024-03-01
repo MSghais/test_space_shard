@@ -6,13 +6,13 @@ interface IRepayByLoan {
   loan?: Partial<Loans>;
   deposit: Partial<Deposit>;
   user: Partial<User>;
-  amountToBorrow: number;
+  amountToRepay: number;
 }
 export const repayDepositLoan = async ({
   loan,
   deposit,
   user,
-  amountToBorrow,
+  amountToRepay,
 }: IRepayByLoan) => {
   try {
     let depositByUser = await prisma.deposit.findFirst({
@@ -34,7 +34,7 @@ export const repayDepositLoan = async ({
       };
     }
 
-    if (depositByUser?.totalDeposit < amountToBorrow) {
+    if (depositByUser?.totalDeposit < amountToRepay) {
       return {
         isOk: false,
       };
@@ -45,7 +45,7 @@ export const repayDepositLoan = async ({
       },
       data: {
         totalDeposit: {
-          decrement: amountToBorrow,
+          decrement: amountToRepay,
         },
       },
     });
@@ -59,7 +59,7 @@ export const repayDepositLoan = async ({
         },
         data: {
           totalBorrowed: {
-            decrement: amountToBorrow,
+            decrement: amountToRepay,
           },
         },
       });

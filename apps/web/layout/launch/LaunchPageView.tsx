@@ -12,9 +12,9 @@ import { useEffect, useState } from "react";
 import { LoansComponent } from "../loans/LoansComponent";
 import { LoansInteractions } from "../loans/LoansInteractions";
 import {Loans} from "db_mongo"
-import { LoanCardView } from "../../types";
+import { LoanInterface, LoanCardView } from "../../types";
 interface ILaunchPageView {
-  loan?: Loans;
+  loan?: LoanInterface;
   viewType?: LoanCardView;
   id?: number;
 }

@@ -1,11 +1,11 @@
 import {  Card, } from "@chakra-ui/react";
-import { LaunchInterface, LoanCardView } from "../../types";
+import { LoanInterface, LoanCardView } from "../../types";
 import { useAccount } from "@starknet-react/core";
 import { useEffect, useState } from "react";
 import { LoansComponent } from "./LoansComponent";
 
 interface ILoanCard {
-  loan?: LaunchInterface;
+  loan?: LoanInterface;
   viewType?: LoanCardView;
 }
 

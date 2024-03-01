@@ -11,11 +11,11 @@ import { Uint256, cairo } from "starknet";
 import { useAccount } from "@starknet-react/core";
 import { useEffect, useState } from "react";
 import { LoansInteractions } from "./LoansInteractions";
-import { LoanCardView, LaunchInterface } from "../../types";
+import { LoanCardView, LoanInterface } from "../../types";
 import { formatDateTime } from "../../utils/format";
 
 interface ILaunchPageView {
-  loan?: LaunchInterface;
+  loan?: LoanInterface;
   viewType?: LoanCardView;
   id?: number;
 }
@@ -39,6 +39,13 @@ export const LoansComponent = ({ loan, viewType, id }: ILaunchPageView) => {
     updateWithdrawTo();
   }, [address]);
 
+  let interestPercentage = loan?.interestPercentage;
+  const toReceiveAnnualy: number | undefined =
+    (loan?.totalBorrowed * interestPercentage) / 100;
+
+  const amountToReceive: number | undefined =
+    (loan?.totalBorrowed * interestPercentage) / 100;
+
   return (
     <>
       <Box
@@ -56,18 +63,22 @@ export const LoansComponent = ({ loan, viewType, id }: ILaunchPageView) => {
         {loan?.collateralRatio && (
           <Text>Collateral ratio : {loan?.collateralRatio} %</Text>
         )}
-        {loan?.assetFund && (
+        {loan?.assetIdFund && typeof loan?.assetIdFund != "string" &&  (
           <Box>
             <Text wordBreak={"break-all"}>
-              Asset address: {loan?.assetFund?.name}
+              Asset address: {loan?.assetIdFund?.name}
             </Text>
             <Text wordBreak={"break-all"}>
-              Price in dollar: {loan?.assetFund?.priceInDollar}
+              Price in dollar: {loan?.assetIdFund?.priceInDollar}
             </Text>
           </Box>
         )}
-        {loan?.totalBorrowed && (
-          <Text>Total borrow : {loan?.totalBorrowed}</Text>
+        <Text>Total borrow : {loan?.totalBorrowed ?? 0}</Text>
+        <Text>Percentage interest: {interestPercentage} %</Text>
+        {!Number.isNaN(toReceiveAnnualy) && (
+          <Box>
+            <Text>To gain: {toReceiveAnnualy} per year</Text>
+          </Box>
         )}
         <Box display={{ md: "flex" }}>
           <Box>

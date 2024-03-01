@@ -7,17 +7,15 @@ import {
   Th,
   Td,
   Tbody,
-  Button,
 } from "@chakra-ui/react";
-import { LaunchInterface, LoanCardView } from "../../types";
-import { feltToAddress } from "../../utils/starknet";
+import { LoanInterface, LoanCardView } from "../../types";
 import { useAccount } from "@starknet-react/core";
 
 import { IFilterLaunch } from "./LoansViewContainer";
 import { LoansInteractions } from "./LoansInteractions";
 
 interface IStreamCard {
-  loans?: LaunchInterface[];
+  loans?: LoanInterface[];
   viewType?: LoanCardView;
   filterLaunch?: IFilterLaunch;
 }
@@ -35,29 +33,57 @@ export const TableLoans = ({ viewType, loans, filterLaunch }: IStreamCard) => {
               <Th>Actions</Th>
               <Th>Created at</Th>
               <Th>Annual interest</Th>
-              <Th>Amount to borrow</Th>
               <Th>Total borrowed</Th>
+              <Th>Stats</Th>
             </Tr>
           </Thead>
           <Tbody>
             {loans?.length > 0 &&
               loans.map((l, i) => {
+                let interestPercentage = l?.interestPercentage;
+                const toReceiveAnnualy: number | undefined =
+                  (l?.totalBorrowed * interestPercentage) / 100;
+
+                const amountToReceive: number | undefined =
+                  (l?.totalBorrowed * interestPercentage) / 100;
+
                 return (
                   <Tr
                     key={i}
-                    // height={{ base: "100%" }}
                     justifyContent={"end"}
                     alignContent={"end"}
                     alignItems={"end"}
                   >
-                    <Td>{l?.assetIdFund?.toString()}</Td>
-                    <Td><LoansInteractions loan={l}></LoansInteractions></Td>
+                    <Td>
+                      {l?.assetIdFund && typeof l?.assetIdFund != "string" && (
+                        <Box>
+                          <Text wordBreak={"break-all"}>
+                            Asset address: {l?.assetIdFund?.name}
+                          </Text>
+                          <Text wordBreak={"break-all"}>
+                            Price in dollar: {l?.assetIdFund?.priceInDollar}
+                          </Text>
+                        </Box>
+                      )}
+                    </Td>
+                    <Td>
+                      <LoansInteractions loan={l}></LoansInteractions>
+                    </Td>
                     <Td>{l?.createdAt?.toString()}</Td>
                     <Td>{l?.interestPercentage?.toString()}</Td>
                     <Td>{l?.totalBorrowed?.toString()}</Td>
+                    <Td>
+                      <Box>
+                        <Text>Percentage interest: {interestPercentage} %</Text>
+                        {!Number.isNaN(toReceiveAnnualy) && (
+                          <Box>
+                            <Text>To gain: {toReceiveAnnualy} per year</Text>
+                          </Box>
+                        )}
+                      </Box>
+                    </Td>
                   </Tr>
                 );
-                // }
               })}
           </Tbody>
         </>
