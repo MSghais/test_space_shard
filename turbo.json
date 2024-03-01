@@ -1,0 +1,64 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["**/.env.*local"],
+  "globalEnv": [
+    "NODE_ENV",
+    "GOOGLE_CLIENT_ID",
+    "GOOGLE_CLIENT_SECRET",
+    "WORKFLOW",
+    "DB_URL_MONGODB",
+    "ENCRYPTION_KEY",
+    "NEXT_PUBLIC_WALLET_CONNECT_ID",
+    "NEXT_PUBLIC_GOOGLE_ANALYTICS",
+    "APP_URL",
+    "NEXT_PUBLIC_APP_URL",
+    "DISCORD_CLIENT_ID",
+    "DISCORD_CLIENT_SECRET",
+    "NEXTAUTH_SECRET",
+    "NEXTAUTH_URL",
+    "NEXT_PUBLIC_URL_DOMAIN",
+    "NEXT_PUBLIC_URL",
+    "REACT_APP_NETWORK"
+  ],
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**"],
+      "env": [
+        "DB_URL_MONGODB",
+        "NEXT_PUBLIC_APP_URL"
+      ]
+    },
+    "run": {
+      "env": [
+        "DB_URL_MONGODB",
+        "NEXT_PUBLIC_PINATA_JWT",
+        "APP_URL"
+
+      ]
+    },
+    "db:migrate:deploy": {},
+    "db:seed": {},
+    "db:generate": {
+      "cache": false
+    },
+    "db:push": {
+      "cache": false
+    },
+    "lint": {
+      "outputs": []
+    },
+    "generate": {
+      "dependsOn": ["^generate"]
+    },
+    "dev": {
+      "dependsOn": ["^db:generate"],
+      "cache": false,
+      "persistent": true
+
+    },
+    "clean": {
+      "cache": false
+    }
+  }
+}

@@ -1,0 +1,181 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DB_URL_MONGODB")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+model User {
+  id                 String    @id @default(auto()) @map("_id") @db.ObjectId // Use String as the ID type
+  name               String?
+  username           String?
+  twitterUsername    String?
+  email              String?
+  emailVerified      DateTime? @map("email_verified")
+  image              String?
+  providerType       String    @map("provider_type")
+  providerId         String    @map("provider_id")
+  refreshToken       String?
+  accessToken        String?
+  passwordHash String?
+  accessTokenExpires DateTime?
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @default(now()) @map("updated_at")
+
+  ownReferralLink  String?
+  referralLinkUsed String?
+
+  avatar String?
+
+  loansPools    Loans[]
+  balances    Balance[]
+  deposits    Deposit[]
+  tokens    Token[]
+
+  @@map("users")
+}
+
+enum TokenType {
+  STABLE_COIN
+  VEHICLES
+  REAL_ESTATE
+  ERC20 
+  ERC721
+}
+
+
+model Balance {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  priceInDollar Int?
+  totalSupply Int?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @default(now()) @map("updated_at")
+  endAt       DateTime? @map("end_at")
+  ownerProfile User? @relation(fields: [ownerId], references: [id])
+  ownerId      String?  @db.ObjectId
+
+  asset Token? @relation(fields: [assetId], references: [id])
+  assetId      String?  @db.ObjectId
+}
+
+model Token {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  priceInDollar Int?
+  totalSupply Int?
+  address     String?
+  name        String
+  symbol      String?
+  owner       String?
+  image       String?
+  creator     String?
+  tokenType   TokenType?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @default(now()) @map("updated_at")
+  endAt       DateTime? @map("end_at")
+  ownerProfile User? @relation(fields: [ownerId], references: [id])
+  ownerId      String?  @db.ObjectId
+
+  balances Balance[]
+  deposit Deposit[]
+
+  loansFund      Loans[] @relation("AssetFund")
+
+  
+  loansCollateral      Loans[] @relation("AssetCollateral")
+}
+
+model Pool {
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
+  address        String
+  tokenType      String
+  price          String
+  tokenLimitMint String
+  interestRateYearly Int?
+  addressToPay   String?
+  totalToBuy     String?
+  totalSupply    Int?
+}
+
+model Loans {
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
+  priceByToken   String?
+  tokenLimitMint Int
+  limitDeposit Int
+  interestPercentage Int?
+
+  totalBorrowed Int?
+
+  collateralRatio Int?
+
+  name String?
+  
+  owner          String
+  tokenAddress   String?
+  price          String?
+  addressToPay   String?
+  totalToBuy     String?
+  totalSupply    Int?
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @map("updated_at")
+  endAt     DateTime? @map("end_at")
+
+  ownerProfile User? @relation(fields: [ownerId], references: [id])
+  ownerId      String?  @db.ObjectId
+
+
+  assetCollateral Token? @relation("AssetCollateral",fields: [assetIdCollateral], references: [id])
+  assetIdCollateral      String?  @db.ObjectId
+
+  
+  assetFund Token? @relation("AssetFund",fields: [assetIdFund], references: [id])
+  assetIdFund      String?  @db.ObjectId
+
+
+  deposits Deposit[]
+}
+
+model Deposit {
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
+  totalDeposit Int?
+  interestPercentage Int?
+  amountAvailable Int?
+
+  assetCollateralId String?
+  tokenType      TokenType?
+  priceByToken   String?
+  owner          String
+  tokenAddress   String?
+  price          String?
+  totalToBuy     String?
+  totalSupply    Int?
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @map("updated_at")
+  endAt     DateTime? @map("end_at")
+
+  ownerProfile User? @relation(fields: [ownerId], references: [id])
+  ownerId      String?  @db.ObjectId
+
+  assetCollateral Token? @relation(fields: [assetIdCollateral], references: [id])
+  assetIdCollateral      String?  @db.ObjectId
+
+  loanDeposit Loans? @relation(fields: [loanId], references: [id])
+  loanId      String?  @db.ObjectId
+
+}
+
+enum ContractType {
+  ERC20
+  ERC721
+  ERC1155
+  ERC6551
+  ERC4337
+}
+
