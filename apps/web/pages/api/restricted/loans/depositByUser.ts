@@ -1,9 +1,7 @@
 import { NextApiHandler } from "next";
-import { getAllLoans, getLoanById } from "../../../../services/mongodb/loans";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]";
 import { checkUserExistsByEmail } from "../../../../services/mongodb";
-import { borrowByLoan } from "../../../../services/mongodb/loans/borrow";
 import { ERROR_MESSAGES } from "../../../../constants/error";
 import { getAllDepositsByUser } from "../../../../services/mongodb/loans/deposits";
 

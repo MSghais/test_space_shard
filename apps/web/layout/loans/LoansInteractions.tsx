@@ -1,9 +1,7 @@
 import {
   Box,
-  Card,
   Text,
   Button,
-  CardFooter,
   Input,
   useToast,
 } from "@chakra-ui/react";
@@ -11,20 +9,9 @@ import { LaunchInterface, LoanCardView } from "../../types";
 import {
   Uint256,
   cairo,
-  shortString,
-  stark,
-  uint256,
-  validateAndParseAddress,
 } from "starknet";
-import { feltToAddress, feltToString } from "../../utils/starknet";
 import { useAccount } from "@starknet-react/core";
 import { useEffect, useState } from "react";
-import { BiCheck, BiCheckShield } from "react-icons/bi";
-import {
-  ExternalStylizedButtonLink,
-  ExternalTransparentButtonLink,
-} from "../../components/button/NavItem";
-import { CONFIG_WEBSITE } from "../../constants";
 import axios from "axios";
 
 interface ILaunchPageView {
@@ -33,7 +20,6 @@ interface ILaunchPageView {
   id?: number;
 }
 
-/** @TODO get component view ui with call claim reward for recipient visibile */
 export const LoansInteractions = ({ loan, viewType, id }: ILaunchPageView) => {
   const toast = useToast();
   const account = useAccount().account;
@@ -78,11 +64,10 @@ export const LoansInteractions = ({ loan, viewType, id }: ILaunchPageView) => {
         p={{ base: "1.5em", md: "1.5em" }}
         rounded={"1em"}
         overflow={"hidden"}
-        // justifyContent={"space-between"}
         height={"100%"}
       >
         {amountToBuy && Number(amountToBuy) > 0 && (
-          <Text>Amount to buy: {Number(amountToBuy)}</Text>
+          <Text>Amount to borrow: {Number(amountToBuy)}</Text>
         )}
         <Input
           py={{ base: "0.5em" }}
@@ -93,7 +78,7 @@ export const LoansInteractions = ({ loan, viewType, id }: ILaunchPageView) => {
           onChange={(e) => {
             setAmount(Number(e?.target?.value));
           }}
-          placeholder="Amount to deposit"
+          placeholder="Amount to borrow"
         ></Input>
         <Box
           gap="1em"
@@ -111,9 +96,6 @@ export const LoansInteractions = ({ loan, viewType, id }: ILaunchPageView) => {
             Borrow
           </Button>
 
-          {/* <Button
-            width={"100%"}
-          >Withdraw</Button> */}
         </Box>
       </Box>
     </>

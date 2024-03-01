@@ -13,10 +13,12 @@ export const getAllDepositsByUser = async ({ userId }: IDepositByUser) => {
         ownerId: userId
       },
       select:{
+        id:true,
         totalDeposit:true,
         loanDeposit:{
           select:{
             interestPercentage:true,
+            id:true,
           }
         }
       }
@@ -24,5 +26,29 @@ export const getAllDepositsByUser = async ({ userId }: IDepositByUser) => {
     return depositsByUser;
   } catch (e) {
     console.log("get all loans", e);
+  }
+};
+
+export const getDepositById = async (id: string) => {
+  try {
+    const loanById = await prisma.deposit.findUnique({
+      where: {
+        id: id,
+      },
+       select:{
+        id:true,
+        totalDeposit:true,
+        loanDeposit:{
+          select:{
+            interestPercentage:true,
+            id:true,
+          }
+        }
+      }
+    });
+    console.log("loanById", loanById);
+    return loanById;
+  } catch (e) {
+    console.log("error loanById", e);
   }
 };

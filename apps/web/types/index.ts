@@ -66,12 +66,13 @@ export interface LaunchInterface extends Loans {
 }
 
 export interface DepositByUser extends Deposit{
+  id:string;
   launch_id?: number;
   createdAt?:Date;
   asset?: string;
   owner: string;
   quote_token_address?: string;
-  totalDeposit?: number;
+  totalDeposit: number;
   interestPercentage?:number;
   loanDeposit?:Loans
 

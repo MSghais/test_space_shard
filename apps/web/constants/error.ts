@@ -27,4 +27,9 @@ export const ERROR_MESSAGES= {
         label:"NOT_ADMIN_PROJECT",
         message:"NOT_ADMIN_PROJECT"
     },
+
+    NO_DEPOSIT_ID: {
+        label:"NO_DEPOSIT_ID",
+        message:"NO_DEPOSIT_ID"
+    },
 }

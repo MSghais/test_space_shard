@@ -1,8 +1,13 @@
-import { Box, Card, Text, Button, CardFooter, Input, Progress } from "@chakra-ui/react";
 import {
-  Uint256,
-  cairo,
-} from "starknet";
+  Box,
+  Card,
+  Text,
+  Button,
+  CardFooter,
+  Input,
+  Progress,
+} from "@chakra-ui/react";
+import { Uint256, cairo } from "starknet";
 import { useAccount } from "@starknet-react/core";
 import { useEffect, useState } from "react";
 import { LoansInteractions } from "./LoansInteractions";
@@ -42,41 +47,34 @@ export const LoansComponent = ({ loan, viewType, id }: ILaunchPageView) => {
         p={{ base: "1.5em", md: "1.5em" }}
         rounded={"1em"}
         overflow={"hidden"}
-        // justifyContent={"space-between"}
         height={"100%"}
       >
-        <Box>
-          <Box>
-         
-            <Box
-
-              display={{ base: "flex" }}
-              justifyItems={"start"}
-              alignContent={"start"}
-              justifyContent={"space-around"}
-            >
-
-            </Box>
-
-          </Box>
-        </Box>
         {loan?.limitDeposit && <Text>Limit deposit: {loan?.limitDeposit}</Text>}
-        {loan?.interestPercentage && <Text>Annual interest: {loan?.interestPercentage} %</Text>}
-        {loan?.collateralRatio && <Text>Collateral ratio  : {loan?.collateralRatio} %</Text>}
-        <Box>
-          <Text wordBreak={"break-all"}>Asset address:</Text>
-        </Box>
-
-        <Box
-          display={{ md: "flex" }}
-        >
+        {loan?.interestPercentage && (
+          <Text>Annual interest: {loan?.interestPercentage} %</Text>
+        )}
+        {loan?.collateralRatio && (
+          <Text>Collateral ratio : {loan?.collateralRatio} %</Text>
+        )}
+        {loan?.assetFund && (
+          <Box>
+            <Text wordBreak={"break-all"}>
+              Asset address: {loan?.assetFund?.name}
+            </Text>
+            <Text wordBreak={"break-all"}>
+              Price in dollar: {loan?.assetFund?.priceInDollar}
+            </Text>
+          </Box>
+        )}
+        {loan?.totalBorrowed && (
+          <Text>Total borrow : {loan?.totalBorrowed}</Text>
+        )}
+        <Box display={{ md: "flex" }}>
           <Box>
             <Text>Start Date: {formatDateTime(startDate)}</Text>
           </Box>
-
         </Box>
         <LoansInteractions loan={loan} id={id}></LoansInteractions>
-
       </Box>
     </>
   );

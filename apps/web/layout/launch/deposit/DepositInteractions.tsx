@@ -1,8 +1,15 @@
-import { Box, Text, Button, CardFooter, Input, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Text,
+  Button,
+  CardFooter,
+  Input,
+  useToast,
+} from "@chakra-ui/react";
 import { LoanCardView, DepositByUser } from "../../../types";
 import { useAccount } from "@starknet-react/core";
 import { useEffect, useState } from "react";
-
+import axios from "axios";
 interface ILaunchPageView {
   deposit?: DepositByUser;
   viewType?: LoanCardView;
@@ -16,12 +23,10 @@ export const DepositInteractions = ({
 }: ILaunchPageView) => {
   const account = useAccount().account;
   const address = account?.address;
-  const toast = useToast()
+  const toast = useToast();
 
   const [withdrawTo, setWithdrawTo] = useState<string | undefined>(address);
-  const [amountToBuy, setAmountToBuy] = useState<number | undefined>(
-    0
-  );
+  const [amountToBuy, setAmountToBuy] = useState<number | undefined>(0);
   useEffect(() => {
     const updateWithdrawTo = () => {
       if (!withdrawTo && address) {
@@ -31,9 +36,19 @@ export const DepositInteractions = ({
     updateWithdrawTo();
   }, [address]);
 
-  const handleRepay = () => {
-
-    toast({title:"Repay in process"})
+  const handleRepay = async () => {
+    try {
+      toast({ title: "Repay in process" });
+      const res = await axios.post("/api/restricted/loans/repayDebt", {
+        depositId:deposit?.id,
+        amount:amountToBuy
+      });
+  
+      toast({ title: "Repay succeed", status:'success' });
+    } catch (e) {
+      console.log("e repay",e)
+    }
+ 
   };
 
   return (
